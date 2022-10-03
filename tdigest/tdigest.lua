@@ -70,12 +70,12 @@ function TDigest:summary()
     approx = 'exact'
   end
   local s = {
-    approx + self.n + ' samples using ' + self:size() + ' centroids',
-    'min = ' + self:percentile(0),
-    'Q1 = ' + self:percentile(0.25),
-    'Q2 = ' + self:percentile(0.5),
-    'Q3 = ' + self:percentile(0.75),
-    'max = ' + self:percentile(1.0),
+    approx .. ' ' .. self.n .. ' samples using ' .. self:size() .. ' centroids',
+    'min = ' .. tostring(self:percentile(0)),
+    'Q1 = ' .. tostring(self:percentile(0.25)),
+    'Q2 = ' .. tostring(self:percentile(0.5)),
+    'Q3 = ' .. tostring(self:percentile(0.75)),
+    'max = ' .. tostring(self:percentile(1.0)),
   }
   return table.concat(s, '\n')
 end
@@ -145,10 +145,10 @@ function TDigest:addWeight(nearest, x, n)
   if x ~= nearest.mean then
     nearest.mean = nearest.mean + n * (x - nearest.mean) / (nearest.n + n)
   end
-  nearest.cumn = nearest.cumn + n
-  nearest.meanCumn = nearest.meanCumn + n / 2
-  nearest.n = nearest.n + n
-  self.n = self.n + n
+  nearest.cumn = (nearest.cumn or 0) + n
+  nearest.meanCumn = (nearest.meanCumn or 0) + n / 2
+  nearest.n = (nearest.n or 0) + n
+  self.n = (self.n or 0) + n
 end
 
 function TDigest:digest(x, n)
@@ -247,7 +247,7 @@ function TDigest:percentile(p)
   end
   local result = {}
   for i = 1, #ps, 1 do
-    result[i] = self:_percentile(p)
+    result[i] = self:_percentile(ps[i])
   end
   if type(p) ~= 'table' then
     return result[1]

@@ -46,10 +46,10 @@ end
 digest:compress();
 print(digest:summary());
 for p = 0, 1.0, 0.1 do
-  print(string.format("p = %.2f, x ~ %f", p, digest:percentile(p)));
+  print(string.format("p = %.2f, x ~ %s", p, tostring(digest:percentile(p))));
 end
 for x = -5, 5, 1.0 do
-  print(string.format("x = %f, p ~ %f", x, digest:pRank(x)));
+  print(string.format("x = %f, p ~ %s", x, tostring(digest:pRank(x))));
 end
 
 -- force the digest to store all unique samples, regardless of number
